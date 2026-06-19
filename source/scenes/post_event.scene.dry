@@ -99,17 +99,30 @@ if (Q.dissent < 0) {
 }
 
 // 1. update dates
+if ([1, 3, 5, 7, 8, 10, 12].includes(Q.month)) {
+    Q.month_end = 31;
+} else if ([4, 6, 9, 11].includes(Q.month)) {
+    Q.month_end = 30;
+} else {
+    Q.month_end = 29;
+}
+
 if (Q.month_actions >= 1) {
     Q.time += 1;
     Q.month_actions = 0;
-    Q.month += 1;
-    if (Q.month >= 13) {
-        Q.month = 1;
-        Q.year += 1;
+    Q.day += 1;
+    if (Q.day >= Q.month_end) {
+        Q.day = 1;
+        Q.month += 1;
         if (Q.historical_mode) {
             Q.resources += 2;
         }
     }
+    if (Q.month >= 13) {
+        Q.month = 1;
+        Q.year += 1;
+    }
+
     // decrement timers
     for (timer of Q.timers) {
         if (Q[timer+'_timer'] && Q[timer+'_timer'] > 0) {
@@ -117,12 +130,12 @@ if (Q.month_actions >= 1) {
         }
     }
     // append to historical party support records
-    var party_support_results = {'date': new Date(Q.year, Q.month - 1)};
+    var party_support_results = {'date': new Date(Q.year, Q.month - 1, 1 + Q.day)};
     for (var party of Q.parties) {
         party_support_results[party] = Q[party + '_normalized']*100;
     }
     Q.party_support_records.push(party_support_results);
-    Q.economic_records.push({'date': new Date(Q.year, Q.month - 1),
+    Q.economic_records.push({'date': new Date(Q.year, Q.month - 1, 1 + Q.day),
                              'inflation': Q.inflation,
                              'unemployment': Q.unemployed});
     // change economic stats...
@@ -486,7 +499,7 @@ if (typeof window !== "undefined" && window.generateBar) {
 !}
 go-to: events_choice if has_event = 1; main if has_event = 0 and difficulty >= 0; main.main_easy if has_event = 0 and difficulty < 0
 
-= [+ month : month +] [+ year +]
+=  [+ day : day +] [+ day +]th [+ month : month +] [+ year +]
 
 @events_choice
 
