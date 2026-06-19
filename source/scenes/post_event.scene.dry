@@ -111,6 +111,10 @@ if (Q.month_actions >= 1) {
     Q.time += 1;
     Q.month_actions = 0;
     Q.day += 1;
+    Q.weekday += 1;
+    if (Q.weekday >= 7) {
+        Q.weekday = 1;
+    }
     if (Q.day >= Q.month_end) {
         Q.day = 1;
 
@@ -501,7 +505,7 @@ if (typeof window !== "undefined" && window.generateBar) {
 !}
 go-to: events_choice if has_event = 1; main if has_event = 0 and difficulty >= 0; main.main_easy if has_event = 0 and difficulty < 0
 
-=  [+ (day + 1)% 7 : weekday +] [+ day +]th [+ month : month +] [+ year +]
+=  [+ weekday  : weekday +] [+ day +]th [+ month : month +] [+ year +]
 
 @events_choice
 
