@@ -25,6 +25,9 @@ Q.day = 1;
 Q.year = 1928;
 Q.month = 1;
 Q.weekday = 1;
+Q.weeks = 0;
+Q.rema_weekdays = 0;
+Q.tot_days_to_add = 0;
 // how many actions have been taken this month?
 Q.month_actions = 0;
 

@@ -112,9 +112,21 @@ if (Q.month_actions >= 1) {
     Q.month_actions = 0;
     Q.day += 1;
     Q.weekday += 1;
+    Q.weeks = Math.floor(time/5);
+    Q.rema_weekdays = time % 5;
+    Q.tot_days_to_add = Q.weeks * 7 + Q.rema_weekdays;
     
+
+
+
+
+
+    if (Q.weekday >= 6) {
+        Q.weekday = 1;
+        Q.day += 3
+    }
     if (Q.day >= Q.month_end) {
-        Q.day = 1;
+        Q.day -= Q.month_end;
 
         Q.month += 1;
         if (Q.historical_mode) {
@@ -124,9 +136,6 @@ if (Q.month_actions >= 1) {
     if (Q.month >= 13) {
         Q.month = 1;
         Q.year += 1;
-    }
-    if (Q.weekday >= 7) {
-        Q.weekday = 1;
     }
     // decrement timers
     for (timer of Q.timers) {
@@ -504,7 +513,7 @@ if (typeof window !== "undefined" && window.generateBar) {
 !}
 go-to: events_choice if has_event = 1; main if has_event = 0 and difficulty >= 0; main.main_easy if has_event = 0 and difficulty < 0
 
-=  [+ weekday  : weekday +] [+ day +]th [+ month : month +] [+ year +]
+=  [+ {! tot_days_to_add % 7 !} : weekday +] [+ day +]th [+ month : month +] [+ year +]
 
 @events_choice
 
