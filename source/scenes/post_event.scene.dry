@@ -99,22 +99,45 @@ if (Q.dissent < 0) {
 }
 
 // 1. update dates
-if (Q.week_actions >= 1 && Q.current_player >= Q.n_players) {
-    Q.week_actions = 0;
-    Q.time += 1;
-    Q.week += 1;
-    if (Q.week >= 5) {
-        Q.month += 1;
-        Q.week = 1;
+if ([1, 3, 5, 7, 8, 10, 12].includes(Q.month)) {
+    Q.month_end = 31;
+} else if ([4, 6, 9, 11].includes(Q.month)) {
+    Q.month_end = 30;
+} else {
+    Q.month_end = 29;
+}
 
+if (Q.month_actions >= 1) {
+    Q.time += 1;
+    Q.month_actions = 0;
+    Q.day += 1;
+    Q.weekday += 1;
+    Q.weeks = Math.floor(time/5);
+    Q.rema_weekdays = time % 5;
+    Q.tot_days_to_add = Q.weeks * 7 + Q.rema_weekdays;
+    
+
+
+
+
+
+    if (Q.weekday >= 6) {
+        Q.weekday = 1;
+        Q.day += 3
+    }
+    if (Q.day >= Q.month_end) {
+        Q.day -= Q.month_end;
+
+        Q.month += 1;
+        if (Q.historical_mode) {
+            Q.resources += 2;
+        }
     }
     if (Q.month >= 13) {
         Q.month = 1;
         Q.year += 1;
     }
-    // update records
-
-    `````
+    
     // decrement timers
     for (timer of Q.timers) {
         if (Q[timer+'_timer'] && Q[timer+'_timer'] > 0) {
